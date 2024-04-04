@@ -17,8 +17,8 @@ Route<dynamic>?  onGenerate(RouteSettings settings){
 
     case AppRoute.login:
           return MaterialPageRoute(builder: (context)=>  LoginScreen());
-  // case AppRoute.home:
-  //         return MaterialPageRoute(builder: (context)=> const HomeScreen());
+  case AppRoute.home:
+          return MaterialPageRoute(builder: (context)=> const HomeScreen());
 
     // default:
     //   return MaterialPageRoute(builder: (context)=> const RegisterPage());

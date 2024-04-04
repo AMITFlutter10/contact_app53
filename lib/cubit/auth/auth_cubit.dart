@@ -32,7 +32,7 @@ class AuthCubit extends Cubit<AuthState> {
   })async{
     UserCredential userCredential =
     await  auth.createUserWithEmailAndPassword(email: email, password: password);
-    //  userModel.pic
+    // userModel.pic=
     userModel.email = email;
     userModel.id= userCredential.user!.uid;
     userModel.name = name;

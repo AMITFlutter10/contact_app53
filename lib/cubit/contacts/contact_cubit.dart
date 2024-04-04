@@ -1,4 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:contact_app53/view/contact_screen.dart';
+import 'package:contact_app53/view/favorite_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +39,7 @@ class ContactCubit extends Cubit<ContactState> {
    ];
    List<Map>favoriteList= [];
   getContacts()async{
+    contactList =[];
    emit( LoadingGetDataState());
     await fireStore.collection("Contacts").get().then((value) {
       for (QueryDocumentSnapshot<Map<String,dynamic>> element in  value.docs ){
@@ -46,6 +51,7 @@ class ContactCubit extends Cubit<ContactState> {
     });
   }
   getFavorite()async{
+    favoriteList= [];
    emit( LoadingGetFavoriteDataState());
     await fireStore.collection("Contacts").get().then((value) {
       for (QueryDocumentSnapshot<Map<String,dynamic>> element in  value.docs ){
@@ -81,5 +87,30 @@ class ContactCubit extends Cubit<ContactState> {
 });
 
   }
+  List<String>title=[
+    "contact",
+    "favorite"
+  ];
+  bool isBottomSheetShow = false;
+  IconData floatingIcon = Icons.person;
+
+  void changeBottomSheet({required bool isShown, required IconData icon}) {
+    isBottomSheetShow = isShown;
+    floatingIcon = icon;
+    emit(AppChangeBottomSheetState());
+  }
+  List<Widget>screen=[
+    ContactScreen(),
+    FavoriteScreen(),
+  ];
+  int currentIndex = 0;
+
+  void changeButtonNavbar(int index){
+    currentIndex =index;
+    emit(ChangeNavState());
+  }
+
+
+
 }
 

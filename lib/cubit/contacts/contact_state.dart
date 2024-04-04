@@ -21,3 +21,6 @@ class UpdateFavoriteDataState extends ContactState{}
 
 
 class DeleteContactsDataState extends ContactState{}
+
+class ChangeNavState extends ContactState{}
+class AppChangeBottomSheetState extends ContactState{}

@@ -1,5 +1,4 @@
 import 'package:auth_buttons/auth_buttons.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -8,7 +7,6 @@ import '../../Routes/route.dart';
 import '../../cubit/auth/auth_cubit.dart';
 import '../widgets/default_form_field.dart';
 import '../widgets/default_text.dart';
-
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -40,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Container(
                       margin: const EdgeInsets.all(20),
                       width: w,
-                      height: h * 0.70,
+                      height: h * 0.80,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
@@ -192,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               ElevatedButton(
                                   onPressed: () async {
-                                    await AuthCubit.get(context).uploadImage("cam");
+                                    await AuthCubit.get(context).uploadImage("gggggg");
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
