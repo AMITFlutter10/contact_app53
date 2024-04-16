@@ -12,7 +12,8 @@ class FavoriteScreen extends StatelessWidget {
     return BlocBuilder<ContactCubit, ContactState>(
       builder: (context, state) {
         return ContactsListBuilder(
-          contacts: ContactCubit
+          contacts:
+          ContactCubit
               .get(context)
               .favoriteList,
           contactType: 'All',

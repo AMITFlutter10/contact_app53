@@ -21,6 +21,11 @@ class ContactCubit extends Cubit<ContactState> {
   // insertDataBase
   // updateData
   // delete
+
+  createDataBase(){
+    getContacts();
+    getFavorite();
+  }
   insertData({required String name,required String number , }){
     int uniqueId = DateTime.now().millisecondsSinceEpoch;
     fireStore.collection("Contacts").doc(uniqueId.toString()).set({
@@ -29,17 +34,19 @@ class ContactCubit extends Cubit<ContactState> {
       "id": uniqueId,
       "type": "all"
     }).then((value) {
+      getContacts();
+      getFavorite();
       emit(ContactSentSuccessDataState());
     }).catchError((error){
       print(ContactErrorDataState());
     });
   }
   // getData
-   List<Map>contactList= [
+   List<Map>  contactList= [
    ];
    List<Map>favoriteList= [];
   getContacts()async{
-    contactList =[];
+    contactList.clear();
    emit( LoadingGetDataState());
     await fireStore.collection("Contacts").get().then((value) {
       for (QueryDocumentSnapshot<Map<String,dynamic>> element in  value.docs ){
@@ -53,9 +60,10 @@ class ContactCubit extends Cubit<ContactState> {
   getFavorite()async{
     favoriteList= [];
    emit( LoadingGetFavoriteDataState());
-    await fireStore.collection("Contacts").get().then((value) {
+    await fireStore.collection("Contacts").where("type", isEqualTo: "Favorite").get().then((value) {
+      favoriteList= [];
       for (QueryDocumentSnapshot<Map<String,dynamic>> element in  value.docs ){
-        favoriteList.add(element.data());}
+          favoriteList.add(element.data());}
       emit( SuccessGetFavoriteDataState());
     }).catchError((error){
       print(error);
@@ -67,7 +75,8 @@ class ContactCubit extends Cubit<ContactState> {
       "name":name,
       "number":number,
     }).then((value) {
-      //getContacts();
+      getContacts();
+      getFavorite();
      emit(UpdateContactsDataState());
     });
   }
@@ -76,6 +85,7 @@ class ContactCubit extends Cubit<ContactState> {
       "type":type,
     }).then((value) {
       getFavorite();
+      getContacts();
      emit(UpdateFavoriteDataState());
     });
   }
@@ -84,6 +94,7 @@ class ContactCubit extends Cubit<ContactState> {
     fireStore.collection("Contacts").doc(id.toString()).delete().then((value) {
       emit(DeleteContactsDataState());
       getContacts();
+      getFavorite();
 });
 
   }

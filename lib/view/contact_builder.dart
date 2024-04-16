@@ -1,7 +1,13 @@
+import 'package:contact_app53/cubit/contacts/contact_cubit.dart';
+import 'package:contact_app53/utilities/styles/color.dart';
 import 'package:contact_app53/view/widgets/default_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'edit_contacts.dart';
 
 class ContactsListBuilder extends StatelessWidget{
   final List<Map> contacts;
@@ -57,43 +63,48 @@ class ContactsListItems extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
      return
-    // Dismissible(
-    //   key: UniqueKey(),
-    //   onDismissed: (direction)async{
-    //     await HomeCubit.get(context).deleteContacts(id: contactsModel['id']);
-    //     Fluttertoast.showToast(msg: "Contact Deleted Successfully!",
-    //       toastLength: Toast.LENGTH_LONG,
-    //       gravity: ToastGravity.BOTTOM,
-    //       timeInSecForIosWeb: 3,
-    //       backgroundColor: AppTheme.gray,
-    //       textColor: AppTheme.primaryColor,
-    //       fontSize: 12.sp,
-    //     );
-    //   },
-    //   child: InkWell(
-    //     onTap: (){
-    //       Fluttertoast.showToast(msg: "Long touch for contact editing,swipe left or"
-    //           " right to delete , double click dor calling contact",
-    //         toastLength: Toast.LENGTH_LONG,
-    //         gravity: ToastGravity.BOTTOM,
-    //         timeInSecForIosWeb: 3,
-    //         backgroundColor: AppTheme.gray,
-    //         textColor: AppTheme.primaryColor,
-    //         fontSize: 12.sp,
-    //       );
-    //     },
-    //     onLongPress: (){
-    //       showDialog(context: context,
-    //           barrierDismissible: false,
-    //           builder: (context)=> EditingContacts(contactModel: contactsModel,));
-    //     },
-    //     onDoubleTap: ()async{
-    //       final Uri launchUri =Uri(
-    //           scheme: 'tel',
-    //           path: contactsModel['phoneNumber']
-    //       );
-    //       await launchUrl(launchUri);
-    //     },
+    Dismissible(
+      key: UniqueKey(),
+      onDismissed: (direction)async{
+        await ContactCubit.get(context).deleteContact(
+            id: contactsModel['id']);
+
+        Fluttertoast.showToast(msg: "Contact Deleted Successfully!",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 3,
+          backgroundColor: Colors.grey,
+          textColor: Colors.purple,
+          fontSize: 12.sp,
+        );
+      },
+     child:
+    InkWell(
+        onTap: (){
+          Fluttertoast.showToast(msg: "Long touch for contact editing,swipe left or"
+              " right to delete , double click dor calling contact",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 3,
+            backgroundColor:Colors.grey,
+            textColor: Colors.purple,
+            fontSize: 12.sp,
+          );
+        },
+        onLongPress: (){
+          showDialog(context: context,
+              barrierDismissible: false,
+              builder: (context)=> EditingContacts(contactModel: contactsModel,));
+        },
+        onDoubleTap: ()async{
+          final Uri launchUri =
+          Uri(
+              scheme: 'tel',
+              path: contactsModel['number']
+          );
+          await launchUrl(launchUri);
+        },
+        child:
      Container(
           margin: EdgeInsets.symmetric(horizontal: 2.w),
           padding: EdgeInsets.symmetric(horizontal: 2.w ,vertical: 2.h ),
@@ -129,7 +140,7 @@ class ContactsListItems extends StatelessWidget{
                         fontWeight: FontWeight.bold,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        color: Colors.white,
+                        color: AppTheme.kPrimaryColor,
 
                       ),
                     ),
@@ -146,31 +157,31 @@ class ContactsListItems extends StatelessWidget{
                   ),
                 ],
               ),
-              // Visibility(
-              //   visible:contactsModel['type']=="Favorite" ,
-              //   replacement:
-              //   IconButton(
-              //       onPressed: ()async{
-              //         await HomeCubit.get(context).addOrRemoveFavorites(
-              //             type: 'Favorite',
-              //             id: contactsModel['id']);
-              //       },
-              //       icon: const Icon(Icons.favorite_border,
-              //         color: Colors.grey,)),
-              //
-              //   child: IconButton(
-              //       onPressed: ()async{
-              //         await HomeCubit.get(context).addOrRemoveFavorites(
-              //             type: 'All',
-              //             id: contactsModel['id']);
-              //       },
-              //       icon: const Icon(Icons.favorite,
-              //         color: Colors.red,)),
-              // )
+              Visibility(
+                visible:contactsModel['type']=="Favorite" ,
+                replacement:
+                IconButton(
+                    onPressed: ()async{
+                      await ContactCubit.get(context).updateFavorite(
+                          type: 'Favorite',
+                          id: contactsModel['id']);
+                    },
+                    icon: const Icon(Icons.favorite_border,
+                      color: Colors.grey,)),
+
+                child: IconButton(
+                    onPressed: ()async{
+                      await ContactCubit.get(context).updateFavorite(
+                          type: 'all',
+                          id: contactsModel['id']);
+                    },
+                    icon: const Icon(Icons.favorite,
+                      color: Colors.red,)),
+              )
             ],
           ),
 
-    );
+    )));
   }
 
 }
